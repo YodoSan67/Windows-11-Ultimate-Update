@@ -33,7 +33,7 @@ jobs:
           Write-Host ""
           Write-Host "  =======================================================" -ForegroundColor Green
           Write-Host "              Windows 11 Ultimate RDP (ditzz)            " -ForegroundColor Green
-          Write-Host "                      The v7.1 Update                      " -ForegroundColor Green
+          Write-Host "                      The v7.3 Update                      " -ForegroundColor Green
           Write-Host "  =======================================================" -ForegroundColor Green
           Write-Host ""
           Write-Host "-> Pilihan Pengguna:" -ForegroundColor Cyan
@@ -48,7 +48,8 @@ jobs:
           Write-Host "-> Mengonfigurasi layanan RDP dan akun pengguna..." -ForegroundColor Cyan
           Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name "fDenyTSConnections" -Value 0 -Force
           Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
-          $runnerAdminPass = "DitzzWindows11#$0!"; net user "runneradmin" $runnerAdminPass; echo "RDP_RUNNER_PASS=$runnerAdminPass" >> $env:GITHUB_ENV
+          
+          $runnerAdminPass = "DitzzRDP2025"; net user "runneradmin" $runnerAdminPass; echo "RDP_RUNNER_PASS=$runnerAdminPass" >> $env:GITHUB_ENV
           $ditzzPass = "P@ssword123!"; net user "ditzz" $ditzzPass /add /fullname:"ditzz"; Set-LocalUser -Name "ditzz" -PasswordNeverExpires $true; net localgroup "Administrators" "ditzz" /add; net localgroup "Remote Desktop Users" "ditzz" /add; echo "RDP_DITZZ_PASS=$ditzzPass" >> $env:GITHUB_ENV
           Write-Host "-> Konfigurasi pengguna dan RDP selesai." -ForegroundColor Green
 
@@ -138,7 +139,7 @@ jobs:
             Write-Warning "-> GAGAL: Rainmeter tidak dapat diinstal."
           }
           Write-Host "-> Menerapkan profil OBS ringan..." -ForegroundColor Cyan
-          $obsProfileDir = "$env:APDATA\obs-studio\basic\profiles\Untitled"
+          $obsProfileDir = "$env:APPDATA\obs-studio\basic\profiles\Untitled"
           New-Item -ItemType Directory -Force -Path $obsProfileDir
           $obsConfig = @'
           [General]
