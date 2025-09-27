@@ -75,19 +75,6 @@ jobs:
           Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name "DragFullWindows" -Value 0
           Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name "FontSmoothing" -Value 0
           
-          Write-Host "-> Creating maintenance script for sustained performance..."
-          $maintenanceScript = @"
-          # Bersihkan memori secara agresif
-          Get-Process | Where-Object { `$_.WorkingSet -gt 200MB } | Stop-Process -Force
-          # Nonaktifkan layanan non-kritis
-          Get-Service | Where-Object { `$_.Status -eq 'Running' -and `$_.CanStop -and `$_.Name -notin ('TermService', 'Tls') } | Stop-Service -Force
-          "@
-          Set-Content -Path "C:\maintenance.ps1" -Value $maintenanceScript
-          # Buat scheduled task untuk dijalankan setiap 15 menit
-          $action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "C:\maintenance.ps1"
-          $trigger = New-ScheduledTaskTrigger -Minute 15
-          Register-ScheduledTask -Action $action -Trigger $trigger -TaskName "PerformanceMaintenance" -Description "Keep system optimized during RDP session"
-          
           Write-Host "-> All performance optimizations applied."
 
       - name: "[3] Install Steam & Tailscale"
@@ -197,7 +184,7 @@ jobs:
           
           - **Network**: Ultra-low latency tweaks (Nagle disabled, TCP buffers optimized)
           - **Input**: Zero-delay mouse/keyboard (125Hz polling, no acceleration)
-          - **System**: Memory cleanup every 15 minutes, service debloat
+          - **System**: Memory optimization, service debloat
           - **UI**: Instant response (no animations, real-time process priority)
           
           ---
