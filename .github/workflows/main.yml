@@ -91,10 +91,14 @@ jobs:
           Start-Process -FilePath $tailscaleInstaller -ArgumentList "/S" -Wait
           Write-Host "-> Core software installation complete."
           
-      - name: "[3.5] Install winget"
+      - name: "[3.5] Install winget and its Dependencies"
         shell: powershell
         run: |
           # Perbaikan untuk windows-2022
+          Write-Host "-> Installing winget dependency (Microsoft.VCLibs)..."
+          Invoke-WebRequest -Uri "https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx" -OutFile "Microsoft.VCLibs.x64.14.00.Desktop.appx"
+          Add-AppxPackage -Path ".\Microsoft.VCLibs.x64.14.00.Desktop.appx"
+          
           Write-Host "-> Installing winget package manager..."
           Invoke-WebRequest -Uri "https://aka.ms/get-winget" -OutFile "Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
           Add-AppxPackage -Path ".\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
@@ -182,4 +186,4 @@ jobs:
           echo $summary >> $env:GITHUB_STEP_SUMMARY
           
           Write-Host "`nAll steps complete. RDP is active."
-          while ($true) { $ts = Get-Date -f "HH:mm:ss"; Write-Host "[$ts] Connection active..."; Start-Sleep 300 }
+          while ($true) { $ts = Get-Date -f "HH:mm:ss"; Write-Host "[$ts] Connection active..."; Start-Sleep 300 }```
